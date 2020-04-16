@@ -4,64 +4,64 @@ use serde_json::{Map, Value};
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Difficulty {
     #[serde(rename = "_version")]
-    version: String,
+    pub version: String,
 
     #[serde(rename = "_events")]
-    events: Vec<Event>,
+    pub events: Vec<Event>,
     #[serde(rename = "_notes")]
-    notes: Vec<Note>,
+    pub notes: Vec<Note>,
     #[serde(rename = "_obstacles")]
-    obstacles: Vec<Obstacle>,
+    pub obstacles: Vec<Obstacle>,
 
     #[serde(rename = "_customData", default, skip_serializing_if = "Map::is_empty")]
-    custom_data: Map<String, Value>,
+    pub custom_data: Map<String, Value>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Event {
     #[serde(rename = "_time")]
-    time: f32,
+    pub time: f32,
     #[serde(rename = "_type")]
-    ty: i32,
+    pub ty: i32,
     #[serde(rename = "_value")]
-    value: i32,
+    pub value: i32,
 
     #[serde(rename = "_customData", default, skip_serializing_if = "Map::is_empty")]
-    custom_data: Map<String, Value>,
+    pub custom_data: Map<String, Value>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Note {
     #[serde(rename = "_time")]
-    time: f32,
+    pub time: f32,
     #[serde(rename = "_lineIndex")]
-    line_index: i32,
+    pub line_index: i32,
     #[serde(rename = "_lineLayer")]
-    line_layer: i32,
+    pub line_layer: i32,
     #[serde(rename = "_type")]
-    ty: i32,
+    pub ty: i32,
     #[serde(rename = "_cutDirection")]
-    cut_direction: i32,
+    pub cut_direction: i32,
 
     #[serde(rename = "_customData", default, skip_serializing_if = "Map::is_empty")]
-    custom_data: Map<String, Value>,
+    pub custom_data: Map<String, Value>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Obstacle {
     #[serde(rename = "_time")]
-    time: f64,
+    pub time: f64,
     #[serde(rename = "_lineIndex")]
-    line_index: i32,
+    pub line_index: i32,
     #[serde(rename = "_type")]
-    ty: i32,
+    pub ty: i32,
     #[serde(rename = "_duration")]
-    duration: f32,
+    pub duration: f32,
     #[serde(rename = "_width")]
-    width: i32,
+    pub width: i32,
 
     #[serde(rename = "_customData", default, skip_serializing_if = "Map::is_empty")]
-    custom_data: Map<String, Value>,
+    pub custom_data: Map<String, Value>,
 }
 
 #[cfg(feature = "extras")]

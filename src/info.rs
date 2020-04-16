@@ -6,53 +6,53 @@ use serde_repr::{Deserialize_repr, Serialize_repr};
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Info {
     #[serde(rename = "_version")]
-    version: String,
+    pub version: String,
 
     #[serde(rename = "_songName")]
-    song_name: String,
+    pub song_name: String,
     #[serde(rename = "_songSubName")]
-    song_sub_name: String,
+    pub song_sub_name: String,
     #[serde(rename = "_songAuthorName")]
-    song_author_name: String,
+    pub song_author_name: String,
     #[serde(rename = "_levelAuthorBane")]
-    level_author_name: String,
+    pub level_author_name: String,
 
     #[serde(rename = "_beatsPerMinute")]
-    beats_per_minute: f32,
+    pub beats_per_minute: f32,
     #[serde(rename = "_songTimeOffset")]
-    song_time_offset: f32,
+    pub song_time_offset: f32,
     #[serde(rename = "_shuffle")]
-    shuffle: f32,
+    pub shuffle: f32,
     #[serde(rename = "_shufflePeriod")]
-    shuffle_period: f32,
+    pub shuffle_period: f32,
 
     #[serde(rename = "_previewStartTime")]
-    preview_start_time: f32,
+    pub preview_start_time: f32,
     #[serde(rename = "_previewDuration")]
-    preview_duration: f32,
+    pub preview_duration: f32,
 
     #[serde(rename = "_songFilename")]
-    song_filename: String,
+    pub song_filename: String,
     #[serde(rename = "_coverImageFilename")]
-    cover_image_filename: String,
+    pub cover_image_filename: String,
 
     #[serde(rename = "_environmentName")]
-    environment_name: String,
+    pub environment_name: String,
     #[serde(
         rename = "_allDirectionsEncironmentName",
         skip_serializing_if = "Option::is_none"
     )]
-    all_directions_environment_name: Option<String>,
+    pub all_directions_environment_name: Option<String>,
 
     #[serde(
         rename = "_customData",
         default,
         skip_serializing_if = "DefaultPartialEq::is_default"
     )]
-    custom_data: InfoCustomData,
+    pub custom_data: InfoCustomData,
 
     #[serde(rename = "_difficultyBeatmapSets")]
-    difficulty_beatmap_sets: Vec<DifficultyBeatmapSet>,
+    pub difficulty_beatmap_sets: Vec<DifficultyBeatmapSet>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Default, Clone, PartialEq)]
@@ -62,64 +62,64 @@ pub struct InfoCustomData {
         default,
         skip_serializing_if = "Vec::is_empty"
     )]
-    contributors: Vec<Contributor>,
+    pub contributors: Vec<Contributor>,
 
     #[serde(
         rename = "_difficultyBeatmapSets",
         skip_serializing_if = "Option::is_none"
     )]
-    custom_environment: Option<String>,
+    pub custom_environment: Option<String>,
     #[serde(
         rename = "_difficultyBeatmapSets",
         skip_serializing_if = "Option::is_none"
     )]
-    custom_environment_hash: Option<String>,
+    pub custom_environment_hash: Option<String>,
 
     #[serde(flatten, default)]
-    custom: Map<String, Value>,
+    pub custom: Map<String, Value>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Hash)]
 pub struct Contributor {
     #[serde(rename = "_role")]
-    role: String,
+    pub role: String,
     #[serde(rename = "_name")]
-    name: String,
+    pub name: String,
     #[serde(rename = "_iconPath", skip_serializing_if = "Option::is_none")]
-    icon_path: Option<String>,
+    pub icon_path: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct DifficultyBeatmapSet {
     #[serde(rename = "_beatmapCharacteristicName")]
-    beatmap_characteristic_name: String,
+    pub beatmap_characteristic_name: String,
     #[serde(rename = "_difficultyBeatmaps")]
-    difficulty_beatmaps: Vec<DifficultyBeatmap>,
+    pub difficulty_beatmaps: Vec<DifficultyBeatmap>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct DifficultyBeatmap {
     #[serde(rename = "_difficulty")]
-    difficulty: Difficulty,
+    pub difficulty: Difficulty,
     #[serde(rename = "_difficultyRank")]
-    difficulty_rank: DifficultyRank,
+    pub difficulty_rank: DifficultyRank,
     #[serde(rename = "_beatmapFilename")]
-    beatmap_filename: String,
+    pub beatmap_filename: String,
 
     #[serde(rename = "_noteJumpMovementSpeed")]
-    note_jump_movement_speed: f32,
+    pub note_jump_movement_speed: f32,
     #[serde(rename = "_noteJumpStartBeatOffset")]
-    note_jump_start_beat_offset: f32,
+    pub note_jump_start_beat_offset: f32,
 
     #[serde(
         rename = "_customData",
         default,
         skip_serializing_if = "DefaultPartialEq::is_default"
     )]
-    custom_data: DifficultyBeatmapCustomData,
+    pub custom_data: DifficultyBeatmapCustomData,
 }
 
-#[derive(Deserialize, Serialize, Debug, Copy, Clone, PartialEq, Hash)]
+#[derive(Deserialize, Serialize, Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub enum Difficulty {
     Easy,
     Normal,
@@ -129,7 +129,7 @@ pub enum Difficulty {
 }
 
 #[repr(i32)]
-#[derive(Deserialize_repr, Serialize_repr, Debug, Copy, Clone, PartialEq, Hash)]
+#[derive(Deserialize_repr, Serialize_repr, Debug, Copy, Clone, Eq, PartialEq, Hash)]
 pub enum DifficultyRank {
     Easy = 1,
     Normal = 3,
@@ -141,46 +141,46 @@ pub enum DifficultyRank {
 #[derive(Deserialize, Serialize, Debug, Clone, Default, PartialEq)]
 pub struct DifficultyBeatmapCustomData {
     #[serde(rename = "_difficultyLabel", skip_serializing_if = "Option::is_none")]
-    difficulty_label: Option<String>,
+    pub difficulty_label: Option<String>,
 
     #[serde(rename = "_editorOffset", skip_serializing_if = "Option::is_none")]
-    editor_offset: Option<i32>,
+    pub editor_offset: Option<i32>,
     #[serde(rename = "_editorOldOffset", skip_serializing_if = "Option::is_none")]
-    editor_old_offset: Option<i32>,
+    pub editor_old_offset: Option<i32>,
 
     #[serde(rename = "_colorLeft", skip_serializing_if = "Option::is_none")]
-    color_left: Option<Color>,
+    pub color_left: Option<Color>,
     #[serde(rename = "_colorRight", skip_serializing_if = "Option::is_none")]
-    color_right: Option<Color>,
+    pub color_right: Option<Color>,
 
     #[serde(rename = "_warnings", default, skip_serializing_if = "Vec::is_empty")]
-    warnings: Vec<String>,
+    pub warnings: Vec<String>,
     #[serde(
         rename = "_information",
         default,
         skip_serializing_if = "Vec::is_empty"
     )]
-    information: Vec<String>,
+    pub information: Vec<String>,
     #[serde(
         rename = "_suggestions",
         default,
         skip_serializing_if = "Vec::is_empty"
     )]
-    suggestions: Vec<String>,
+    pub suggestions: Vec<String>,
     #[serde(
         rename = "_requirements",
         default,
         skip_serializing_if = "Vec::is_empty"
     )]
-    requirements: Vec<String>,
+    pub requirements: Vec<String>,
 
     #[serde(flatten, default)]
-    custom: Map<String, Value>,
+    pub custom: Map<String, Value>,
 }
 
 #[derive(Deserialize, Serialize, Debug, Copy, Clone, PartialEq)]
 pub struct Color {
-    r: f64,
-    g: f64,
-    b: f64,
+    pub r: f64,
+    pub g: f64,
+    pub b: f64,
 }
