@@ -25,3 +25,6 @@ optional = true
 default = ["extras", "rw"]
 extras = []
 rw = ["thiserror", "zip"]
+
+[dev-dependencies]
+ureq = "0.12"

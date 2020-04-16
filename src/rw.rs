@@ -120,3 +120,38 @@ pub enum Error {
     #[error("inconsistent beatmap info and sets")]
     InconsistentBeatmap,
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Beatmap;
+    use std::io::{self, Cursor};
+
+    #[test]
+    fn read_write() {
+        let mut request = ureq::get("https://beatsaver.com/api/download/key/570")
+            .set(
+                "User-Agent",
+                concat!("beatmap-rs/", env!("CARGO_PKG_VERSION")),
+            )
+            .build();
+        let response = request.call();
+
+        if response.error() {
+            panic!("http error: {}", response.into_string().unwrap());
+        }
+
+        let mut file = Cursor::new(Vec::new());
+        io::copy(&mut response.into_reader(), &mut file).unwrap();
+        file.set_position(0);
+
+        let old = Beatmap::read(&mut file).unwrap();
+
+        let mut buffer = Cursor::new(Vec::new());
+        old.write(&mut buffer).unwrap();
+        buffer.set_position(0);
+
+        let new = Beatmap::read(&mut buffer).unwrap();
+
+        assert_eq!(old, new);
+    }
+}

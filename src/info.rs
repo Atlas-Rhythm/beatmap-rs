@@ -14,7 +14,7 @@ pub struct Info {
     pub song_sub_name: String,
     #[serde(rename = "_songAuthorName")]
     pub song_author_name: String,
-    #[serde(rename = "_levelAuthorBane")]
+    #[serde(rename = "_levelAuthorName")]
     pub level_author_name: String,
 
     #[serde(rename = "_beatsPerMinute")]
