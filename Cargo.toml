@@ -7,6 +7,7 @@ authors = [
 ]
 edition = "2018"
 license = "Apache-2.0"
+description = "Read, write and edit Beat Saber beatmaps"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
