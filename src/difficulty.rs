@@ -66,6 +66,7 @@ pub struct Obstacle {
 
 #[cfg(feature = "extras")]
 pub mod extras {
+    #[derive(Copy, Clone, PartialEq)]
     pub enum EventType {
         Event0,
         Event1,
@@ -84,7 +85,30 @@ pub mod extras {
         Event14,
         Event15,
 
+        VoidEvent,
+
         Unknown(i32),
+    }
+
+    impl EventType {
+        pub fn is_bmp_change_event(self) -> bool {
+            self == EventType::Event10
+        }
+        pub fn is_rotation_event(self) -> bool {
+            self == EventType::Event14 || self == EventType::Event15
+        }
+        pub fn is_early_rotation_event(self) -> bool {
+            self == EventType::Event14
+        }
+        pub fn is_late_rotation_event(self) -> bool {
+            self == EventType::Event15
+        }
+        pub fn is_early_event(self) -> bool {
+            self == EventType::Event10 || self == EventType::Event14
+        }
+        pub fn is_spawn_affecting_event(self) -> bool {
+            self.is_rotation_event() || self.is_bmp_change_event()
+        }
     }
 
     impl From<i32> for EventType {
@@ -106,6 +130,8 @@ pub mod extras {
                 13 => EventType::Event13,
                 14 => EventType::Event14,
                 15 => EventType::Event15,
+
+                -1 => EventType::VoidEvent,
 
                 _ => EventType::Unknown(n),
             }
@@ -131,6 +157,8 @@ pub mod extras {
                 EventType::Event14 => 14,
                 EventType::Event15 => 15,
 
+                EventType::VoidEvent => -1,
+
                 EventType::Unknown(n) => n,
             }
         }
@@ -142,25 +170,89 @@ pub mod extras {
         }
     }
 
-    pub enum LineIndex {
-        Unknown(i32),
-    }
-
+    #[derive(Copy, Clone, PartialEq)]
     pub enum LineLayer {
         Base,
-        Top,
         Upper,
+        Top,
 
         Unknown(i32),
     }
 
+    impl From<i32> for LineLayer {
+        fn from(n: i32) -> Self {
+            match n {
+                0 => LineLayer::Base,
+                1 => LineLayer::Upper,
+                2 => LineLayer::Top,
+
+                _ => LineLayer::Unknown(n),
+            }
+        }
+    }
+    impl From<LineLayer> for i32 {
+        fn from(l: LineLayer) -> Self {
+            match l {
+                LineLayer::Base => 0,
+                LineLayer::Upper => 1,
+                LineLayer::Top => 2,
+
+                LineLayer::Unknown(n) => n,
+            }
+        }
+    }
+
+    impl super::Note {
+        pub fn line_layer(&self) -> LineLayer {
+            self.line_layer.into()
+        }
+    }
+
+    #[derive(Copy, Clone, PartialEq)]
     pub enum NoteType {
-        Bomb,
-        GhostNote,
         NoteA,
         NoteB,
+        GhostNote,
+        Bomb,
 
         Unknown(i32),
+    }
+
+    impl NoteType {
+        pub fn is_basic_note(self) -> bool {
+            self == NoteType::NoteA || self == NoteType::NoteB
+        }
+    }
+
+    impl From<i32> for NoteType {
+        fn from(n: i32) -> Self {
+            match n {
+                0 => NoteType::NoteA,
+                1 => NoteType::NoteB,
+                2 => NoteType::GhostNote,
+                3 => NoteType::Bomb,
+
+                _ => NoteType::Unknown(n),
+            }
+        }
+    }
+    impl From<NoteType> for i32 {
+        fn from(t: NoteType) -> Self {
+            match t {
+                NoteType::NoteA => 0,
+                NoteType::NoteB => 1,
+                NoteType::GhostNote => 2,
+                NoteType::Bomb => 3,
+
+                NoteType::Unknown(n) => n,
+            }
+        }
+    }
+
+    impl super::Note {
+        pub fn ty(&self) -> NoteType {
+            self.ty.into()
+        }
     }
 
     pub enum ObstacleType {
@@ -168,5 +260,32 @@ pub mod extras {
         Top,
 
         Unknown(i32),
+    }
+
+    impl From<i32> for ObstacleType {
+        fn from(n: i32) -> Self {
+            match n {
+                0 => ObstacleType::FullHeight,
+                1 => ObstacleType::Top,
+
+                _ => ObstacleType::Unknown(n),
+            }
+        }
+    }
+    impl From<ObstacleType> for i32 {
+        fn from(t: ObstacleType) -> Self {
+            match t {
+                ObstacleType::FullHeight => 0,
+                ObstacleType::Top => 1,
+
+                ObstacleType::Unknown(n) => n,
+            }
+        }
+    }
+
+    impl super::Obstacle {
+        pub fn ty(&self) -> ObstacleType {
+            self.ty.into()
+        }
     }
 }
