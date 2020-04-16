@@ -1,0 +1,32 @@
+name: Build
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          components: clippy
+          override: true
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: cargo-index-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions/cache@v1
+        with:
+          path: target
+          key: cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+      - name: Check for Clippy warnings
+        uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
