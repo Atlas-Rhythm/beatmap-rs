@@ -1,4 +1,5 @@
 pub mod difficulty;
+pub(crate) mod ext;
 pub mod info;
 
 #[cfg(test)]

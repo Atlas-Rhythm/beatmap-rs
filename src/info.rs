@@ -1,3 +1,4 @@
+use crate::ext::DefaultPartialEq;
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use serde_repr::{Deserialize_repr, Serialize_repr};
@@ -17,18 +18,18 @@ pub struct Info {
     level_author_name: String,
 
     #[serde(rename = "_beatsPerMinute")]
-    beats_per_minute: f64,
+    beats_per_minute: f32,
     #[serde(rename = "_songTimeOffset")]
-    song_time_offset: f64,
+    song_time_offset: f32,
     #[serde(rename = "_shuffle")]
-    shuffle: f64,
+    shuffle: f32,
     #[serde(rename = "_shufflePeriod")]
-    shuffle_period: f64,
+    shuffle_period: f32,
 
     #[serde(rename = "_previewStartTime")]
-    preview_start_time: f64,
+    preview_start_time: f32,
     #[serde(rename = "_previewDuration")]
-    preview_duration: f64,
+    preview_duration: f32,
 
     #[serde(rename = "_songFilename")]
     song_filename: String,
@@ -43,14 +44,18 @@ pub struct Info {
     )]
     all_directions_environment_name: Option<String>,
 
-    #[serde(rename = "_customData", skip_serializing_if = "Option::is_none")]
-    custom_data: Option<InfoCustomData>,
+    #[serde(
+        rename = "_customData",
+        default,
+        skip_serializing_if = "DefaultPartialEq::is_default"
+    )]
+    custom_data: InfoCustomData,
 
     #[serde(rename = "_difficultyBeatmapSets")]
     difficulty_beatmap_sets: Vec<DifficultyBeatmapSet>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Default, PartialEq)]
 pub struct InfoCustomData {
     #[serde(
         rename = "_difficultyBeatmapSets",
@@ -74,7 +79,7 @@ pub struct InfoCustomData {
     custom: Map<String, Value>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq)]
 pub struct Contributor {
     #[serde(rename = "_role")]
     role: String,
@@ -102,12 +107,16 @@ pub struct DifficultyBeatmap {
     beatmap_filename: String,
 
     #[serde(rename = "_noteJumpMovementSpeed")]
-    note_jump_movement_speed: f64,
+    note_jump_movement_speed: f32,
     #[serde(rename = "_noteJumpStartBeatOffset")]
-    note_jump_start_beat_offset: f64,
+    note_jump_start_beat_offset: f32,
 
-    #[serde(rename = "_customData")]
-    custom_data: Option<DifficultyBeatmapCustomData>,
+    #[serde(
+        rename = "_customData",
+        default,
+        skip_serializing_if = "DefaultPartialEq::is_default"
+    )]
+    custom_data: DifficultyBeatmapCustomData,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -129,7 +138,7 @@ pub enum DifficultyRank {
     ExpertPlus = 9,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Default, PartialEq)]
 pub struct DifficultyBeatmapCustomData {
     #[serde(rename = "_difficultyLabel", skip_serializing_if = "Option::is_none")]
     difficulty_label: Option<String>,
@@ -169,7 +178,7 @@ pub struct DifficultyBeatmapCustomData {
     custom: Map<String, Value>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, PartialEq)]
 pub struct Color {
     r: f64,
     g: f64,
