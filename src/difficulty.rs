@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Difficulty {
     #[serde(rename = "_version")]
     version: String,
@@ -17,7 +17,7 @@ pub struct Difficulty {
     custom_data: Map<String, Value>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Event {
     #[serde(rename = "_time")]
     time: f32,
@@ -30,7 +30,7 @@ pub struct Event {
     custom_data: Map<String, Value>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Note {
     #[serde(rename = "_time")]
     time: f32,
@@ -47,7 +47,7 @@ pub struct Note {
     custom_data: Map<String, Value>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Obstacle {
     #[serde(rename = "_time")]
     time: f64,
@@ -66,7 +66,7 @@ pub struct Obstacle {
 
 #[cfg(feature = "extras")]
 pub mod extras {
-    #[derive(Copy, Clone, PartialEq)]
+    #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
     pub enum EventType {
         Event0,
         Event1,
@@ -170,7 +170,7 @@ pub mod extras {
         }
     }
 
-    #[derive(Copy, Clone, PartialEq)]
+    #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
     pub enum LineLayer {
         Base,
         Upper,
@@ -208,7 +208,7 @@ pub mod extras {
         }
     }
 
-    #[derive(Copy, Clone, PartialEq)]
+    #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
     pub enum NoteType {
         NoteA,
         NoteB,

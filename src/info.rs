@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Map, Value};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct Info {
     #[serde(rename = "_version")]
     version: String,
@@ -55,7 +55,7 @@ pub struct Info {
     difficulty_beatmap_sets: Vec<DifficultyBeatmapSet>,
 }
 
-#[derive(Deserialize, Serialize, Default, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Default, Clone, PartialEq)]
 pub struct InfoCustomData {
     #[serde(
         rename = "_difficultyBeatmapSets",
@@ -79,7 +79,7 @@ pub struct InfoCustomData {
     custom: Map<String, Value>,
 }
 
-#[derive(Deserialize, Serialize, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq, Hash)]
 pub struct Contributor {
     #[serde(rename = "_role")]
     role: String,
@@ -89,7 +89,7 @@ pub struct Contributor {
     icon_path: Option<String>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct DifficultyBeatmapSet {
     #[serde(rename = "_beatmapCharacteristicName")]
     beatmap_characteristic_name: String,
@@ -97,7 +97,7 @@ pub struct DifficultyBeatmapSet {
     difficulty_beatmaps: Vec<DifficultyBeatmap>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Clone, PartialEq)]
 pub struct DifficultyBeatmap {
     #[serde(rename = "_difficulty")]
     difficulty: Difficulty,
@@ -119,7 +119,7 @@ pub struct DifficultyBeatmap {
     custom_data: DifficultyBeatmapCustomData,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug, Copy, Clone, PartialEq, Hash)]
 pub enum Difficulty {
     Easy,
     Normal,
@@ -129,7 +129,7 @@ pub enum Difficulty {
 }
 
 #[repr(i32)]
-#[derive(Deserialize_repr, Serialize_repr)]
+#[derive(Deserialize_repr, Serialize_repr, Debug, Copy, Clone, PartialEq, Hash)]
 pub enum DifficultyRank {
     Easy = 1,
     Normal = 3,
@@ -138,7 +138,7 @@ pub enum DifficultyRank {
     ExpertPlus = 9,
 }
 
-#[derive(Deserialize, Serialize, Default, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Clone, Default, PartialEq)]
 pub struct DifficultyBeatmapCustomData {
     #[serde(rename = "_difficultyLabel", skip_serializing_if = "Option::is_none")]
     difficulty_label: Option<String>,
@@ -178,7 +178,7 @@ pub struct DifficultyBeatmapCustomData {
     custom: Map<String, Value>,
 }
 
-#[derive(Deserialize, Serialize, PartialEq)]
+#[derive(Deserialize, Serialize, Debug, Copy, Clone, PartialEq)]
 pub struct Color {
     r: f64,
     g: f64,
