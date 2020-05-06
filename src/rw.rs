@@ -5,7 +5,7 @@ use std::{
     io::{Read, Seek, Write},
 };
 use thiserror::Error;
-use zip::{ZipArchive, ZipWriter};
+use zip::{read::ZipFile, result::ZipError, ZipArchive, ZipWriter};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Beatmap {
@@ -15,18 +15,31 @@ pub struct Beatmap {
     pub sets: HashMap<String, HashMap<InfoDifficulty, Difficulty>>,
 }
 
+fn zip_by_name<'a, R: Read + Seek>(
+    zip: &'a mut ZipArchive<R>,
+    name: &str,
+) -> Result<ZipFile<'a>, Error> {
+    match zip.by_name(name) {
+        Ok(f) => Ok(f),
+        Err(e) => match e {
+            ZipError::FileNotFound => Err(Error::MissingFile(name.to_owned())),
+            _ => Err(e.into()),
+        },
+    }
+}
+
 impl Beatmap {
     pub fn read<R: Read + Seek>(reader: R) -> Result<Self, Error> {
         let mut zip = ZipArchive::new(reader)?;
 
         let info: Info = {
-            let mut file = zip.by_name("info.dat")?;
+            let mut file = zip_by_name(&mut zip, "info.dat")?;
             serde_json::from_reader(&mut file)?
         };
 
         let song = {
             let filename = &info.song_filename;
-            let mut file = zip.by_name(filename)?;
+            let mut file = zip_by_name(&mut zip, filename)?;
             let mut buffer = Vec::with_capacity(file.size().try_into()?);
             file.read_to_end(&mut buffer)?;
             buffer
@@ -34,7 +47,7 @@ impl Beatmap {
 
         let cover = {
             let filename = &info.cover_image_filename;
-            let mut file = zip.by_name(filename)?;
+            let mut file = zip_by_name(&mut zip, filename)?;
             let mut buffer = Vec::with_capacity(file.size().try_into()?);
             file.read_to_end(&mut buffer)?;
             buffer
@@ -47,7 +60,7 @@ impl Beatmap {
             let mut difficulties = HashMap::with_capacity(set.difficulty_beatmaps.len());
             for map in &set.difficulty_beatmaps {
                 let filename = &map.beatmap_filename;
-                let mut file = zip.by_name(filename)?;
+                let mut file = zip_by_name(&mut zip, filename)?;
 
                 let info_difficulty = map.difficulty;
 
@@ -117,6 +130,8 @@ pub enum Error {
     Zip(#[from] zip::result::ZipError),
     #[error("overflow error: {0}")]
     Overflow(#[from] std::num::TryFromIntError),
+    #[error("missing file `{0}` in zip")]
+    MissingFile(String),
     #[error("inconsistent beatmap info and sets")]
     InconsistentBeatmap,
 }

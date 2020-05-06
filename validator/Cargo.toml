@@ -1,0 +1,8 @@
+[package]
+name = "validator"
+version = "0.1.0"
+authors = ["Raphaël Thériault <raphael_theriault@outlook.com>"]
+edition = "2018"
+
+[dependencies]
+beatmap = { path = ".." }

@@ -28,3 +28,6 @@ rw = ["thiserror", "zip"]
 
 [dev-dependencies]
 ureq = "0.12"
+
+[workspace]
+members = ["validator"]
